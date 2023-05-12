@@ -10,8 +10,9 @@ namespace BoTflix
         public static readonly string statusLink = "https://www.twitch.tv/vince_zder";
         public static readonly string _zderLandIconUrl = "https://cdn.discordapp.com/attachments/494958624922271745/1056847373436977162/brookByVince.gif";
         public static readonly string _JellyfinImgUrl =
-            "https://cdn.discordapp.com/attachments/617462663374438411/1072151541638770698/Vincezder_mesmering_television_detailed_colourful_0_4b6a0db4-18ea-4011-a1db-fadf4e8ce347-NoWhite.png";
-        public static readonly string _boToolsGif = "https://cdn.discordapp.com/attachments/553256709439750151/1062431704914067566/KatakuriLow.gif";
+            //"https://cdn.discordapp.com/attachments/617462663374438411/1072151541638770698/Vincezder_mesmering_television_detailed_colourful_0_4b6a0db4-18ea-4011-a1db-fadf4e8ce347-NoWhite.png";
+            "https://cdn.discordapp.com/attachments/617462663374438411/1106597286630391890/bob.gif";
+        public static readonly string _JellyfinGif = "https://cdn.discordapp.com/attachments/617462663374438411/1106595890287886356/high.gif";
         public static readonly string _urlAvatarVince = "https://cdn.discordapp.com/attachments/617462663374438411/846821971114983474/luffy.gif";
         public static readonly ulong _ZderLandId = 312966999414145034;
         public static readonly ulong _idModoRole = 322489502562123778;
@@ -97,10 +98,6 @@ namespace BoTflix
         internal static SocketGuild GetZderLand(DiscordSocketClient client)
         {
             return client.Guilds.FirstOrDefault(); // in prod the bot is strictly connected to Zderland            
-        }
-        internal static IEnumerable<SocketGuild> GetZderLands(DiscordSocketClient client)
-        {
-            return client.Guilds;
         }
 
         internal static IEnumerable<SocketGuildChannel> GetAllChannels(DiscordSocketClient client)

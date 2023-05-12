@@ -221,8 +221,9 @@ namespace BoTflix.Service
             {
                 Url = ngRockUrl,
                 Color = Color.DarkRed,
+                //ImageUrl = Helper._JellyfinImgUrl,
                 ImageUrl = Helper._JellyfinImgUrl,
-                ThumbnailUrl = Helper._boToolsGif,
+                ThumbnailUrl = Helper._JellyfinGif,
 
                 Title = $"{Helper.GetVerifiedEmote()}︱Cliquez ici︱{Helper.GetVerifiedEmote()}",
                 Description = $"{Helper.GetCoinEmote()}  En stream avec **Jellyfin Media Player** sur PC\n" +
