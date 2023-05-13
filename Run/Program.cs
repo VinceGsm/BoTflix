@@ -27,7 +27,7 @@ namespace BoTflix.Run
             _client = client ?? new DiscordSocketClient(
                 new DiscordSocketConfig { MessageCacheSize = 100, AlwaysDownloadUsers = true, GatewayIntents = GatewayIntents.All }
              );
-            _client.SetGameAsync(name: "/ping", type: ActivityType.Streaming);            
+            _client.SetGameAsync(name: "/ping", type: ActivityType.Watching);            
         }
 
         public async Task MainAsync()

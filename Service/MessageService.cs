@@ -1,13 +1,8 @@
-﻿using BoTflix;
-using Discord;
+﻿using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
 using log4net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace BoTflix.Service
 {
@@ -15,17 +10,6 @@ namespace BoTflix.Service
     {
         public DiscordSocketClient _client;
         private const long _vinceId = 312317884389130241;
-        private const long _vinceBisId = 493020872303443969;
-        Dictionary<string, DateTime> _birthDays = null;
-        DateTime? _onGoingBirthday = null;        
-        private static ulong _saloonVoiceId = 493036345686622210;
-        private static ulong _squadVoiceId = 1007423970670297178;
-        private static ulong _squadTmpVoiceId = ulong.MinValue;
-        private static ulong _birthdayId = 1052530092082995201;
-        private static ulong _vocalCategoryId = 493018545089806337;
-        private bool _isSquadOn = false;
-        private IRole _IRoleBirthday = null;
-
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public MessageService(DiscordSocketClient client)
@@ -97,73 +81,6 @@ namespace BoTflix.Service
         #endregion
 
         #region Message
-        public async Task AskForLive(List<SocketGuildUser> targets)
-        {
-            foreach (SocketGuildUser user in targets)
-            {
-                // check if the user is playing a game and not streaming
-                if (!user.IsStreaming && user.Activities.Count > 0)
-                {
-                    if (user.Activities.FirstOrDefault().Type == ActivityType.Playing)
-                    {
-                        log.Info($"AskForLive {user.Activities.First().ToString()} to {user.Username}");
-
-                        // TODO fix ask ppl who just have emoji status
-                        await user.SendMessageAsync($"Hello {user.Username}, (sauf erreur de ma part) Vince m'envoie ici alors voici un GIF symbolisant une demande de Stream :\n" +
-                            $"https://cdn.discordapp.com/attachments/617462663374438411/1081981535688859678/live.gif");
-
-                        // wait for a short period of time before sending the next message (to avoid rate limiting)
-                        await Task.Delay(TimeSpan.FromSeconds(0.5));
-                    }
-                }
-            }
-        }
-
-        public async Task CleanLastMsgChannel(ulong idTargetChannel)
-        {
-            ISocketMessageChannel channel = Helper.GetSocketMessageChannel(_client, idTargetChannel);
-            IReadOnlyCollection<IMessage> lasthundredMsg = channel.GetMessagesAsync(100).FirstAsync().Result;
-
-            foreach (var msg in lasthundredMsg)
-            {
-                await channel.DeleteMessageAsync(msg);
-            }
-        }
-
-        public async Task CheckBirthday()
-        {
-            string msgStart = $"@here {Helper.GetPikachuEmote()} \n" +
-                        $"Vince me souffle dans l'oreille que c'est l'anniversaire de";
-
-            ISocketMessageChannel channel = Helper.GetSocketMessageChannel(_client, Helper._idGeneralChannel);
-
-            if (_birthDays == null)
-                log.Error("list birthdays null !");
-            else
-            {
-                bool isSomeoneBD = _birthDays.ContainsValue(DateTime.Today);
-
-                if (isSomeoneBD)
-                {
-                    string idTagTarget = _birthDays.First(x => x.Value == DateTime.Today).Key;
-
-                    string message = msgStart + $" <@{idTagTarget}> aujourd'hui !\n" +
-                        $"{Helper.GetCoeurEmote()} sur toi";
-
-                    if (channel != null)
-                    {
-                        _onGoingBirthday = DateTime.Today;
-                        var userTarget = Helper.GetZderLand(_client).Users.First(x => x.Id == Convert.ToUInt64(idTagTarget.Remove(0, 1)));
-                        userTarget.AddRoleAsync(_IRoleBirthday);
-
-                        var res = (IMessage)channel.SendMessageAsync(message).Result;
-                        await AddReactionBirthDay(res);
-                    }
-                    else log.Error("Can't wish HB because general was not found");
-                }
-            }
-        }
-
         internal void SendToLeader(string message)
         {
             var leader = _client.GetUser(_vinceId);
@@ -220,15 +137,16 @@ namespace BoTflix.Service
             return new EmbedBuilder
             {
                 Url = ngRockUrl,
-                Color = Color.DarkRed,
-                //ImageUrl = Helper._JellyfinImgUrl,
+                Color = Color.DarkRed,                
                 ImageUrl = Helper._JellyfinImgUrl,
                 ThumbnailUrl = Helper._JellyfinGif,
 
                 Title = $"{Helper.GetVerifiedEmote()}︱Cliquez ici︱{Helper.GetVerifiedEmote()}",
-                Description = $"{Helper.GetCoinEmote()}  En stream avec **Jellyfin Media Player** sur PC\n" +
-                    $"{Helper.GetCoinEmote()}  En **DL** avec Google CHrome sur PC\n" +
-                    $"{Helper.GetCoinEmote()}  ERR_NGROK = relancer **$Jellyfin** \n" +
+                //Description = $"{Helper.GetCoinEmote()}  En stream avec **Jellyfin Media Player** sur PC\n" +
+                //    $"{Helper.GetCoinEmote()}  En **DL** avec Google CHrome sur PC\n" +
+                //    $"{Helper.GetCoinEmote()}  ERR_NGROK = relancer **$Jellyfin** \n" +
+                //    $"{Helper.GetCoinEmote()}  / à venir",
+                Description = $"{Helper.GetCoinEmote()}  xxxxxxxxxxx\n" +
                     $"{Helper.GetCoinEmote()}  / à venir",
 
                 Author = new EmbedAuthorBuilder { Name = "Jellyfin requested by " + userMsg.Author.Username, IconUrl = userMsg.Author.GetAvatarUrl() },

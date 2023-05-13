@@ -4,12 +4,8 @@ using Discord.Commands;
 using Discord.Rest;
 using Discord.WebSocket;
 using log4net;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace BoTflix.Module
 {
