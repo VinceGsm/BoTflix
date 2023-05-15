@@ -13,6 +13,7 @@ namespace BoTflix
         public static readonly string _JellyfinGif = "https://cdn.discordapp.com/attachments/617462663374438411/1106926689763725422/loading.gif";
         public static readonly string _urlAvatarVince = "https://cdn.discordapp.com/attachments/617462663374438411/846821971114983474/luffy.gif";
         public static readonly ulong _ZderLandId = 312966999414145034;
+        public static readonly ulong _idJellyfinRole = 816282726654279702;
         public static readonly ulong _idModoRole = 322489502562123778;
         public static readonly ulong _idGeneralChannel = 312966999414145034;
         public static readonly ulong _idJellyfinChannel = 816283362478129182;

@@ -1,6 +1,7 @@
 ﻿using BoTflix.Service;
 using Discord;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.Rest;
 using Discord.WebSocket;
 using log4net;
@@ -24,12 +25,17 @@ namespace BoTflix.Module
         }
 
 
-        [Command("Jellyfin")]
-        [Summary("Active et partage un lien d'accès au server Jellyfin")]
+        [Command("Jellyfin")]        
+        [Discord.Commands.Summary("Active et partage un lien d'accès au server Jellyfin")]
         public async Task JellyfinAsync()
         {
             string message = string.Empty;
             SocketUserMessage userMsg = Context.Message;
+            SocketGuildUser author = userMsg.Author as SocketGuildUser;
+
+            if (author.Roles.First(x => x.Id == Helper._idJellyfinRole) == null)
+                return;
+
             var reference = new MessageReference(userMsg.Id);
 
             if (Helper.IsJellyfinCorrectChannel(Context.Channel))
@@ -40,7 +46,7 @@ namespace BoTflix.Module
                     await _messageService.SendJellyfinAlreadyInUse(Context.Channel, reference);
                 }
 
-                log.Info($"JellyfinAsync by {userMsg.Author}");
+                log.Info($"JellyfinAsync by {author}");
 
                 //check NAS
                 if (Pinger.Ping())
@@ -48,8 +54,7 @@ namespace BoTflix.Module
                     List<RestMessage> pinneds = Context.Channel.GetPinnedMessagesAsync().Result.ToList();
                     _messageService.UnPinLastJelly(pinneds);
                     userMsg.PinAsync();
-
-                    //await _jellyfinService.ClearChannel(Context.Client); TEST comment
+                    
                     await _messageService.AddReactionVu(userMsg);
 
                     // Jellyfin
@@ -62,11 +67,8 @@ namespace BoTflix.Module
                     var builder = _messageService.MakeJellyfinMessageBuilder(userMsg, ngrokUrl);
                     Embed embed = builder.Build();
 
-                    if (Helper.IsSundayToday())
-                    {
-                        message = $"{Helper.GetLuffyEmote()}";
-                        //_eventService.CreateNextOnePiece(); TODO: IN BOTOOLS
-                    }
+                    if (Helper.IsSundayToday())                    
+                        message = $"{Helper.GetLuffyEmote()}";                                            
                     else
                         message = $"{Helper.GetPepeSmokeEmote()}";
 
