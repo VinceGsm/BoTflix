@@ -1,7 +1,6 @@
 ﻿using BoTflix.Service;
 using Discord;
 using Discord.Commands;
-using Discord.Interactions;
 using Discord.Rest;
 using Discord.WebSocket;
 using log4net;
@@ -51,6 +50,7 @@ namespace BoTflix.Module
                 //check NAS
                 if (Pinger.Ping())
                 {
+                    _messageService._client.SetGameAsync(name: ": $Jellyfin", streamUrl: Helper.statusLink, type: ActivityType.Streaming);
                     List<RestMessage> pinneds = Context.Channel.GetPinnedMessagesAsync().Result.ToList();
                     _messageService.UnPinLastJelly(pinneds);
                     userMsg.PinAsync();
