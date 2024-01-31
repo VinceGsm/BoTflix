@@ -1,0 +1,51 @@
+﻿using Discord;
+using Discord.WebSocket;
+using log4net;
+using System.Reflection;
+
+namespace BoTflix.Service
+{
+    public class LogService
+    {
+        private DiscordSocketClient _client;
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+
+        public LogService(DiscordSocketClient client)
+        {
+            _client = client;
+            _client.Log += Log;
+        }
+
+
+        public Task Log(LogMessage msg)
+        {
+            if (msg.Exception == null)
+            {
+                switch (msg.Severity)
+                {
+                    case LogSeverity.Critical:
+                    case LogSeverity.Error:
+                        log.Error(msg.Message);
+                        break;
+
+                    case LogSeverity.Warning:
+                        log.Warn(msg.Message);
+                        break;
+
+                    case LogSeverity.Verbose:
+                        log.Debug(msg.Message);
+                        break;
+
+                    default:
+                        Console.WriteLine($"{DateTime.Now} : {msg.Message}");
+                        break;
+                }
+            }
+            else
+                log.Error(msg.Exception.Message);
+
+            return Task.CompletedTask;
+        }
+    }
+}
